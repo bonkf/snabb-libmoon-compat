@@ -1,6 +1,6 @@
 module(..., package.seeall)
 
-local echo = require("apps.echo.echo")
+local fwd = require("apps.fwd.fwd")
 local dpdkdev = require("apps.dpdk_device.dpdk_device")
 local log = require("log")
 
@@ -25,15 +25,15 @@ function run(parameters)
   config.app(c, "dpdk", dpdkdev.DPDKDevice, devid)
 
   for i = 1, chainlen do
-    config.app(c, "echo" .. i, echo.Echo)
+    config.app(c, "fwd" .. i, fwd.Fwd)
   end
 
   for i = 1, chainlen - 1 do
-    config.link(c, string.format("echo%d.output -> echo%d.input", i, i + 1))
+    config.link(c, string.format("fwd%d.output -> fwd%d.input", i, i + 1))
   end
 
-  config.link(c, "dpdk.output -> echo1.input")
-  config.link(c, string.format("echo%d.output -> dpdk.input", chainlen))
+  config.link(c, "dpdk.output -> fwd1.input")
+  config.link(c, string.format("fwd%d.output -> dpdk.input", chainlen))
 
   engine.configure(c)
   engine.main{duration = tonumber(parameters[3])}
