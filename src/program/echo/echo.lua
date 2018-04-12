@@ -7,7 +7,7 @@ local log = require("log")
 function run(parameters)
   log:info("running echo")
 
-  if #parameters > 3 then
+  if #parameters > 3 or #parameters < 1 then
     log:warn("Usage: echo <dev-id> [chain-length] [duration]\nexiting...")
     main.exit(1)
   end
